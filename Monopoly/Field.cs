@@ -8,5 +8,7 @@ namespace Monopoly
     {
         public string Name { get; set; } 
         public int Position { get; set; }
+
+        public abstract void Action(Player player);
     }
 }

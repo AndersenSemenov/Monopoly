@@ -10,6 +10,11 @@ namespace Monopoly
     {
         public int AmountOfTax { get; set; }
 
+        public override void Action(Player player)
+        {
+            player.Minus(this.AmountOfTax);
+        }
+
         public static void Create()
         {
             using (StreamReader sr = new StreamReader("D:/С#/Monopoly/TaxeFields.txt"))

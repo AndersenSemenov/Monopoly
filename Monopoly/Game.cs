@@ -17,10 +17,10 @@ namespace Monopoly
             players.Add(new Player(second));
             CreateFields();
             int Count = players.Count;
-            int Circle = 1;
+            int Turn = 1;
             while (Count > 1)
             {
-                Console.WriteLine($"Circle {Circle}");
+                Console.WriteLine($"Circle {Turn}");
                 players[0].PrintData();
                 players[1].PrintData();
                 foreach (var player in players)
@@ -30,7 +30,7 @@ namespace Monopoly
                         player.Move();
                     }    
                 }
-                Thread.Sleep(6000);
+                //Thread.Sleep(6000);
                 Console.Clear();
                 foreach (var player in players)
                 {
@@ -38,14 +38,15 @@ namespace Monopoly
                     {
                         Count--;
                     }
+                    player.numberOfDubles = 0;
                 }
-                Circle++;
+                Turn++;
             }
             foreach (var player in players)
             {
                 if (!player.IsLost)
                 {
-                    Console.WriteLine($"{player.Name} won!");
+                    Console.WriteLine($"{player.Name} won on Circle number {Turn}!");
                 }
             }
         }
@@ -55,8 +56,6 @@ namespace Monopoly
             Company.Create();
             Chance.Create();
             TaxeField.Create();
-            //Field.Create(); ???????????????????????
-
         }
     }
 }

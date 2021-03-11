@@ -8,6 +8,11 @@ namespace Monopoly
 {
     class Chance: Field
     {
+        public override void Action(Player player)
+        {
+            Chance.GetChance(player);
+        }
+
         public static void GetChance(Player player)
         {
             Random random = new Random();
@@ -15,7 +20,7 @@ namespace Monopoly
             if (value <= 8)
             {
                 player.Plus(value * 250);
-                // cw ??
+                //Console.WriteLine($"{player.Name} got {value * 250} dollars in Chance field");
             }
             else if (value == 9)
             {

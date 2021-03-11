@@ -11,6 +11,7 @@ namespace Monopoly
         public bool BlockMovement { get; set; }
         public int Money { get; set; }
         public bool IsLost { get; set; }
+        public int numberOfDubles { get; set; }
         public List<Company> Property = new List<Company>();
 
         public Player(string name)
@@ -20,65 +21,8 @@ namespace Monopoly
             Money = 8000;
             BlockMovement = false;
             IsLost = false;
+            numberOfDubles = 0;
         }
-
-        public void Move()
-        {
-            this.CurrentPosition = RollADice();
-            Field CurrentField = Game.fields[CurrentPosition];
-            //Cell.DoAction();
-            if (CurrentField as Company != null) //Cell, метод move(Player player), этого ifa нет
-            {
-                
-                Company company = CurrentField as Company;
-                if (company.IsBought && company.Owner != this)
-                {
-                    this.PayRent(company);
-                }
-                else if (!company.IsBought && this.Money >= company.Cost)
-                {
-                    company.BuyCompany(this);
-                }
-                else
-                {
-                    Console.WriteLine($"{this.Name} did nothing");
-                    Console.WriteLine();
-                }
-            }
-            else if (CurrentField as Chance != null)
-            {
-                Chance.GetChance(this);
-            }
-            else if (CurrentField as TaxeField != null)
-            {
-                this.PayTaxes(CurrentField as TaxeField);
-                //TaxeField.PayTaxes(this);
-            }
-        }
-
-        public int RollADice() //отдельный класс
-        {
-            Random random = new Random();
-            int dice1 = random.Next(1, 7);
-            int dice2 = random.Next(1, 7);
-            int diceSum = dice1 + dice2;
-            int position = (CurrentPosition + diceSum) % 40;
-            Console.WriteLine($"{this.Name} rolling dices...");
-            Console.WriteLine($"Dice1: {dice1}, dice2: {dice2}");
-            Console.WriteLine($"{this.Name} got into position {position}, field {Game.fields[position].Name}");
-            if (CurrentPosition + diceSum == 40)
-            {
-                Console.WriteLine($"{this.Name} прошел круг");
-                this.Plus(1000);
-            }
-            else if (CurrentPosition + diceSum > 40)
-            {
-                Console.WriteLine($"{this.Name} прошел круг");
-                this.Plus(500);
-            }
-            return position;
-        }
-
 
         public void PrintData()
         {
@@ -91,26 +35,18 @@ namespace Monopoly
             Console.WriteLine();
         }
 
-        public void PayRent(Company company)  // связать с Minus
+        public void Move()
         {
-            //while (this.Money - company.Rent < 0 && this.Property.Count != 0)
-            //{
-            //    Property[0].SellCompany(this);
-            //}
-            //if (this.Money - company.Rent < 0)
-            //{
-            //    this.IsLost = true;
-            //}
-            //else
-            //{
+            Field CurrentField = Dice.RollTwoDices(this);
+            CurrentField.Action(this);
+        }
+
+        public void PayRent(Company company)
+        {
             this.Minus(company.Rent);
             Console.WriteLine($"{this.Name} paid a rent {company.Rent}");
             company.Owner.Plus(company.Rent);
-        }
-
-        public void PayTaxes(TaxeField taxeField)
-        {
-            this.Minus(taxeField.AmountOfTax);
+            Console.WriteLine();
         }
 
         public void Minus(int value)
@@ -125,15 +61,14 @@ namespace Monopoly
             }
             else
             {
-                //Console.WriteLine($"{this.Name} paid {company.Rent}");
                 this.Money -= value;
+                Console.WriteLine($"{this.Name} has {this.Money} dollars");
             }
         }
         public void Plus(int value)
         {
             this.Money += value;
             Console.WriteLine($"{this.Name} has {this.Money} dollars");
-            Console.WriteLine();
         }
     }
 }
