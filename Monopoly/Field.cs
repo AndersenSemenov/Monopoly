@@ -4,11 +4,14 @@ using System.Text;
 
 namespace Monopoly
 {
-    abstract class Field
+    class Field
     {
         public string Name { get; set; } 
         public int Position { get; set; }
 
-        public abstract void Action(Player player);
+        public virtual bool Action(Player player)
+        {
+            return true;
+        }
     }
 }

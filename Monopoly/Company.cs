@@ -13,7 +13,7 @@ namespace Monopoly
         public bool IsBought { get; set; }
         public Player Owner { get; set; }
 
-        public override void Action(Player player)
+        public override bool Action(Player player)
         {
             if (this.IsBought && this.Owner != player)
             {
@@ -28,6 +28,7 @@ namespace Monopoly
                 Console.WriteLine($"{player.Name} did nothing");
                 Console.WriteLine();
             }
+            return true;
         }
 
         public void BuyCompany(Player player)

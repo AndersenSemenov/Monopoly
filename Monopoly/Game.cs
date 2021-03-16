@@ -20,7 +20,7 @@ namespace Monopoly
             int Turn = 1;
             while (Count > 1)
             {
-                Console.WriteLine($"Circle {Turn}");
+                Console.WriteLine($"Turn {Turn}");
                 players[0].PrintData();
                 players[1].PrintData();
                 foreach (var player in players)
@@ -28,7 +28,7 @@ namespace Monopoly
                     if (!player.IsLost)
                     {
                         player.Move();
-                    }    
+                    }
                 }
                 //Thread.Sleep(6000);
                 Console.Clear();
@@ -38,7 +38,6 @@ namespace Monopoly
                     {
                         Count--;
                     }
-                    player.numberOfDubles = 0;
                 }
                 Turn++;
             }
@@ -46,7 +45,7 @@ namespace Monopoly
             {
                 if (!player.IsLost)
                 {
-                    Console.WriteLine($"{player.Name} won on Circle number {Turn}!");
+                    Console.WriteLine($"{player.Name} won on Turn number {Turn}!");
                 }
             }
         }

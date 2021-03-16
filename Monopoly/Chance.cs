@@ -8,28 +8,33 @@ namespace Monopoly
 {
     class Chance: Field
     {
-        public override void Action(Player player)
-        {
-            Chance.GetChance(player);
-        }
-
-        public static void GetChance(Player player)
+        public override bool Action(Player player)
         {
             Random random = new Random();
-            int value = random.Next(1, 11);
+            int value = random.Next(1, 22);
             if (value <= 8)
             {
                 player.Plus(value * 250);
-                //Console.WriteLine($"{player.Name} got {value * 250} dollars in Chance field");
             }
-            else if (value == 9)
+            else if (value <= 16)
             {
-                player.Minus(random.Next(1, 9) * 250);
+                player.Minus((value - 8) * 250); //
             }
-            else if (value == 10)
+            else if (value <= 18)
             {
-                player.CurrentPosition = (player.CurrentPosition + random.Next(1, 41)) % 40;
+                Console.WriteLine($"{player.Name} got a chance of add move");
+                player.Move();
+                //player.CurrentPosition = (player.CurrentPosition + random.Next(1, 13)) % 40;
             }
+            else if (value == 19)
+            {
+
+            }
+            else
+            {
+                // Action
+            }
+            return true;
         }
 
         public static void Create()

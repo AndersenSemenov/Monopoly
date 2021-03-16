@@ -10,9 +10,10 @@ namespace Monopoly
     {
         public int AmountOfTax { get; set; }
 
-        public override void Action(Player player)
+        public override bool Action(Player player)
         {
             player.Minus(this.AmountOfTax);
+            return true;
         }
 
         public static void Create()

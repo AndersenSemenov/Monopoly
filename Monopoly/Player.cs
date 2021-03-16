@@ -8,10 +8,11 @@ namespace Monopoly
     {
         public string Name { get; private set; }
         public int CurrentPosition { get; set; }
-        public bool BlockMovement { get; set; }
+        public int BlockMovement { get; set; } // 3 хода в тюрьме иначе платить 500
         public int Money { get; set; }
         public bool IsLost { get; set; }
-        public int numberOfDubles { get; set; }
+        public bool IsJailed { get; set; }
+        //public int numberOfDoubles { get; set; } 
         public List<Company> Property = new List<Company>();
 
         public Player(string name)
@@ -19,9 +20,9 @@ namespace Monopoly
             Name = name;
             CurrentPosition = 0;
             Money = 8000;
-            BlockMovement = false;
+            BlockMovement = 0;
             IsLost = false;
-            numberOfDubles = 0;
+            IsJailed = false;
         }
 
         public void PrintData()
@@ -37,8 +38,35 @@ namespace Monopoly
 
         public void Move()
         {
-            Field CurrentField = Dice.RollTwoDices(this);
-            CurrentField.Action(this);
+            if (Prison.jailed.Contains(this)) 
+            {
+                Game.fields[0].Action(this); // норм ячейка
+            }
+            else if (this.BlockMovement != 0)
+            {
+                this.BlockMovement--;
+            }
+            else
+            {
+                Tuple<int, int> dice = Die.RollTwoDice();
+                this.MoveOnBoard(dice.Item1, dice.Item2);
+            }
+        }
+
+        public void MoveOnBoard(int dice1, int dice2)
+        {
+            int diceSum = dice1 + dice2;
+            int position = (this.CurrentPosition + diceSum) % 40;
+            Console.WriteLine($"{this.Name} rolling dices...");
+            Console.WriteLine($"Dice1: {dice1}, dice2: {dice2}");
+            if (this.CurrentPosition + diceSum > 40)
+            {
+                Console.WriteLine($"{this.Name} прошел круг");
+                this.Plus(500);
+            }
+            Console.WriteLine($"{this.Name} got into position {position}, field {Game.fields[position].Name}");
+            this.CurrentPosition = position;
+            Game.fields[this.CurrentPosition].Action(this);
         }
 
         public void PayRent(Company company)
@@ -49,7 +77,7 @@ namespace Monopoly
             Console.WriteLine();
         }
 
-        public void Minus(int value)
+        public void Minus(int value) //
         {
             while (this.Money - value < 0 && this.Property.Count != 0)
             {
@@ -65,7 +93,7 @@ namespace Monopoly
                 Console.WriteLine($"{this.Name} has {this.Money} dollars");
             }
         }
-        public void Plus(int value)
+        public void Plus(int value) //
         {
             this.Money += value;
             Console.WriteLine($"{this.Name} has {this.Money} dollars");
