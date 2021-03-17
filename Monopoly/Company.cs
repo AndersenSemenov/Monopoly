@@ -6,14 +6,14 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Company : Field
+    class Company : Cell
     {
         public int Cost { get; set; } 
         public int Rent { get; set; }
         public bool IsBought { get; set; }
         public Player Owner { get; set; }
 
-        public override bool Action(Player player)
+        public override void Action(Player player)
         {
             if (this.IsBought && this.Owner != player)
             {
@@ -28,13 +28,12 @@ namespace Monopoly
                 Console.WriteLine($"{player.Name} did nothing");
                 Console.WriteLine();
             }
-            return true;
         }
 
         public void BuyCompany(Player player)
         {
             Console.WriteLine($"{player.Name} bought a company {this.Name}");
-            player.Minus(this.Cost);
+            player.Pay(this.Cost);
             Console.WriteLine();
             this.Owner = player;
             this.IsBought = true;
@@ -44,7 +43,7 @@ namespace Monopoly
         public void SellCompany(Player player)
         {
             Console.WriteLine($"{player.Name} sold a company {this.Name}");
-            player.Plus(Cost);
+            player.Recieve(Cost);
             IsBought = false;
             Owner = null;  
             player.Property.RemoveAt(0);
@@ -58,7 +57,7 @@ namespace Monopoly
                 while (s != null)
                 {
                     Company company = JsonSerializer.Deserialize<Company>(s);
-                    Game.fields[company.Position] = company;
+                    Game.cells[company.Position] = company;
                     s = sr.ReadLine();
                 }
             }

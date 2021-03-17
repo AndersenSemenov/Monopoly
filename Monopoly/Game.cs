@@ -9,13 +9,13 @@ namespace Monopoly
     {
         public static List<Player> players = new List<Player>();
 
-        public static Field[] fields = new Field[40];
+        public static Cell[] cells = new Cell[40];
         
         public void Play(string first, string second)
         {
             players.Add(new Player(first));
             players.Add(new Player(second));
-            CreateFields();
+            CreateCells();
             int Count = players.Count;
             int Turn = 1;
             while (Count > 1)
@@ -30,7 +30,7 @@ namespace Monopoly
                         player.Move();
                     }
                 }
-                //Thread.Sleep(6000);
+                //Thread.Sleep(3000);
                 Console.Clear();
                 foreach (var player in players)
                 {
@@ -50,11 +50,14 @@ namespace Monopoly
             }
         }
 
-        public void CreateFields()
+        public void CreateCells()
         {
+            Start.Create();
             Company.Create();
             Chance.Create();
             TaxeField.Create();
+            GetToPrison.Create();
+            Prison.Create();
         }
     }
 }

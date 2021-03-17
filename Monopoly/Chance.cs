@@ -6,35 +6,32 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Chance: Field
+    class Chance: Cell
     {
-        public override bool Action(Player player)
+        public override void Action(Player player)
         {
             Random random = new Random();
-            int value = random.Next(1, 22);
+            int value = random.Next(1, 21);
             if (value <= 8)
             {
-                player.Plus(value * 250);
+                player.Recieve(value * 250);
+                Console.WriteLine();
             }
             else if (value <= 16)
             {
-                player.Minus((value - 8) * 250); //
+                player.Pay((value - 8) * 250);
+                Console.WriteLine();
             }
             else if (value <= 18)
             {
                 Console.WriteLine($"{player.Name} got a chance of add move");
+                Console.WriteLine();
                 player.Move();
-                //player.CurrentPosition = (player.CurrentPosition + random.Next(1, 13)) % 40;
-            }
-            else if (value == 19)
-            {
-
             }
             else
             {
-                // Action
+                Game.cells[30].Action(player);
             }
-            return true;
         }
 
         public static void Create()
@@ -45,7 +42,7 @@ namespace Monopoly
                 while (s != null)
                 {
                     Chance chance = JsonSerializer.Deserialize<Chance>(s);
-                    Game.fields[chance.Position] = chance;
+                    Game.cells[chance.Position] = chance;
                     s = sr.ReadLine();
                 }
             }

@@ -1,31 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Text.Json;
 
 namespace Monopoly
 {
-    class Prison : Field
+    class Prison : Cell
     {
-        // list добавить игроков
         public static List<Player> jailed = new List<Player>();
-        public override bool Action(Player player)
+        public override void Action(Player player)
         {
-            Tuple<int, int> dice = Die.RollTwoDice();
-            if (dice.Item1 == dice.Item2)
+            if (jailed.Contains(player))
             {
-                player.BlockMovement = 0;
-                jailed.Remove(player);
-                player.MoveOnBoard(dice.Item1, dice.Item2);
+                Tuple<int, int> dice = Die.RollTwoDice();
+                Console.WriteLine($"{player.Name} tries to get out of the prison");
+                player.BlockMovement--;
+                if (dice.Item1 == dice.Item2)
+                {
+                    player.BlockMovement = 0;
+                    jailed.Remove(player);
+                    player.MoveOnBoard(dice.Item1, dice.Item2);
+                }
+                else if (player.BlockMovement == 0)
+                {
+                    jailed.Remove(player);
+                    player.Pay(1000);
+                    player.MoveOnBoard(dice.Item1, dice.Item2);
+                }
             }
-            else if (player.BlockMovement == 3)
+        }
+
+        public static void Create()
+        {
+            using (StreamReader sr = new StreamReader("D:/С#/Monopoly/Prison.txt"))
             {
-                player.BlockMovement = 0;
-                jailed.Remove(player);
-                player.Minus(1000);
-                player.MoveOnBoard(dice.Item1, dice.Item2);
+                string s = sr.ReadLine();
+                while (s != null)
+                {
+                    Prison prison = JsonSerializer.Deserialize<Prison>(s);
+                    Game.cells[prison.Position] = prison;
+                    s = sr.ReadLine();
+                }
             }
-            player.BlockMovement++;
-            return true;
         }
     }
 }

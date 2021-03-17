@@ -8,11 +8,9 @@ namespace Monopoly
     {
         public string Name { get; private set; }
         public int CurrentPosition { get; set; }
-        public int BlockMovement { get; set; } // 3 хода в тюрьме иначе платить 500
+        public int BlockMovement { get; set; }
         public int Money { get; set; }
         public bool IsLost { get; set; }
-        public bool IsJailed { get; set; }
-        //public int numberOfDoubles { get; set; } 
         public List<Company> Property = new List<Company>();
 
         public Player(string name)
@@ -22,7 +20,6 @@ namespace Monopoly
             Money = 8000;
             BlockMovement = 0;
             IsLost = false;
-            IsJailed = false;
         }
 
         public void PrintData()
@@ -40,7 +37,7 @@ namespace Monopoly
         {
             if (Prison.jailed.Contains(this)) 
             {
-                Game.fields[0].Action(this); // норм ячейка
+                Game.cells[10].Action(this);
             }
             else if (this.BlockMovement != 0)
             {
@@ -61,23 +58,23 @@ namespace Monopoly
             Console.WriteLine($"Dice1: {dice1}, dice2: {dice2}");
             if (this.CurrentPosition + diceSum > 40)
             {
-                Console.WriteLine($"{this.Name} прошел круг");
-                this.Plus(500);
+                Console.WriteLine($"{this.Name} passed the circle");
+                this.Recieve(500);
             }
-            Console.WriteLine($"{this.Name} got into position {position}, field {Game.fields[position].Name}");
+            Console.WriteLine($"{this.Name} got into position {position}, cell {Game.cells[position].Name}");
             this.CurrentPosition = position;
-            Game.fields[this.CurrentPosition].Action(this);
+            Game.cells[this.CurrentPosition].Action(this);
         }
 
         public void PayRent(Company company)
         {
-            this.Minus(company.Rent);
+            this.Pay(company.Rent);
             Console.WriteLine($"{this.Name} paid a rent {company.Rent}");
-            company.Owner.Plus(company.Rent);
+            company.Owner.Recieve(company.Rent);
             Console.WriteLine();
         }
 
-        public void Minus(int value) //
+        public void Pay(int value)
         {
             while (this.Money - value < 0 && this.Property.Count != 0)
             {
@@ -93,7 +90,7 @@ namespace Monopoly
                 Console.WriteLine($"{this.Name} has {this.Money} dollars");
             }
         }
-        public void Plus(int value) //
+        public void Recieve(int value)
         {
             this.Money += value;
             Console.WriteLine($"{this.Name} has {this.Money} dollars");

@@ -6,14 +6,13 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class TaxeField: Field
+    class TaxeField: Cell
     {
         public int AmountOfTax { get; set; }
 
-        public override bool Action(Player player)
+        public override void Action(Player player)
         {
-            player.Minus(this.AmountOfTax);
-            return true;
+            player.Pay(this.AmountOfTax);
         }
 
         public static void Create()
@@ -24,7 +23,7 @@ namespace Monopoly
                 while (s != null)
                 {
                     TaxeField taxeField = JsonSerializer.Deserialize<TaxeField>(s);
-                    Game.fields[taxeField.Position] = taxeField;
+                    Game.cells[taxeField.Position] = taxeField;
                     s = sr.ReadLine();
                 }
             }

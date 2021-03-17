@@ -6,10 +6,11 @@ namespace Monopoly
 {
     class Die
     {
+        private static readonly int maxValueOfDie = 7;
         public static int RollADie()
         {
             Random random = new Random();
-            int dice = random.Next(1, 7);
+            int dice = random.Next(1, maxValueOfDie);
             return dice;
         }
 
