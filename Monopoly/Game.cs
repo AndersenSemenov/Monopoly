@@ -30,7 +30,7 @@ namespace Monopoly
                         player.Move();
                     }
                 }
-                //Thread.Sleep(3000);
+                //Thread.Sleep(2000);
                 Console.Clear();
                 foreach (var player in players)
                 {
