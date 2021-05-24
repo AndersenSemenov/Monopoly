@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Company : Super 
+    class Company : Super//, ICell 
     {
         private int _rent;
         public override int Rent { get => _rent; set => _rent = value; }

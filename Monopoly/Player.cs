@@ -84,7 +84,7 @@ namespace Monopoly
                         level = (Game.cells[index] as Super).Level;
                     }
                 }
-                if (this.Money >= (Game.cells[pos] as Super).HouseCost)
+                if (this.Money >= (Game.cells[pos] as Super).HouseCost && (Game.cells[pos] as Super).Level <= 5)
                 {
                     Game.cells[pos] = new House((Super)Game.cells[pos]);
                     this.Money -= (Game.cells[pos] as Super).HouseCost;
@@ -128,5 +128,3 @@ namespace Monopoly
         }
     }
 }
-
-//checkIfMonop Game.cells[] = Destroy();

@@ -16,7 +16,7 @@ namespace Monopoly
         public int Position { get; set; }
         public int HouseCost { get; set; }
 
-        public abstract void Action(Player player);
+        public abstract void Action(Player player); //////// ?????????????????????????? Action(Super) ?? Action (ICell)
         public abstract void Sell(Player player);
     }
 }
