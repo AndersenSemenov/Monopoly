@@ -6,9 +6,11 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class GetToPrison : Cell
+    class GetToPrison : ICell
     {
-        public override void Action(Player player)
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public void Action(Player player)
         {
             player.BlockMovement = 3;
             player.CurrentPosition = 10;

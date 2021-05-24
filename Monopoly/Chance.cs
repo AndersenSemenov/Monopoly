@@ -6,9 +6,11 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Chance: Cell
+    class Chance: ICell
     {
-        public override void Action(Player player)
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public void Action(Player player)
         {
             Random random = new Random();
             int value = random.Next(1, 21);

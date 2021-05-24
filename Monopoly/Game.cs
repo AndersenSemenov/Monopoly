@@ -9,13 +9,14 @@ namespace Monopoly
     {
         public static List<Player> players = new List<Player>();
 
-        public static Cell[] cells = new Cell[40];
+        public static ICell[] cells = new ICell[40];
         
         public void Play(string first, string second)
         {
             players.Add(new Player(first));
             players.Add(new Player(second));
             CreateCells();
+            MONOPOLYINFO.CreateDictionary();
             int Count = players.Count;
             int Turn = 1;
             while (Count > 1)

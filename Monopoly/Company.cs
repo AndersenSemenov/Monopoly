@@ -6,12 +6,12 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Company : Cell
+    class Company : Super 
     {
-        public int Cost { get; set; } 
-        public int Rent { get; set; }
-        public bool IsBought { get; set; }
-        public Player Owner { get; set; }
+        private int _rent;
+        public override int Rent { get => _rent; set => _rent = value; }
+
+        public override int Level { get => 0; }
 
         public override void Action(Player player)
         {
@@ -22,6 +22,11 @@ namespace Monopoly
             else if (!this.IsBought && player.Money >= this.Cost)
             {
                 this.BuyCompany(player);
+                if (MONOPOLYINFO.BelongToOneMonopoly(this.Color, player) && this.Color != null)
+                {
+                    MONOPOLYINFO.CreateMonopoly(this.Color);
+                    player.MonopolyColors.Add(this.Color);
+                }
             }
             else
             {
@@ -37,16 +42,17 @@ namespace Monopoly
             Console.WriteLine();
             this.Owner = player;
             this.IsBought = true;
-            player.Property.Add(this);
+            player.Property.Add(this.Position);
         }
 
-        public void SellCompany(Player player)
+        public override void Sell(Player player)
         {
             Console.WriteLine($"{player.Name} sold a company {this.Name}");
             player.Recieve(Cost);
             IsBought = false;
-            Owner = null;  
-            player.Property.RemoveAt(0);
+            Owner = null;
+            var index = player.Property.BinarySearch(this.Position);
+            player.Property.RemoveAt(index);
         }
 
         public static void Create()

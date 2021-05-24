@@ -11,7 +11,9 @@ namespace Monopoly
         public int BlockMovement { get; set; }
         public int Money { get; set; }
         public bool IsLost { get; set; }
-        public List<Company> Property = new List<Company>();
+
+        public List<int> Property = new List<int>();
+        public List<string> MonopolyColors = new List<string>();
 
         public Player(string name)
         {
@@ -26,9 +28,10 @@ namespace Monopoly
         {
             Console.WriteLine($"{this.Name} has {this.Money} dollars and located in position {this.CurrentPosition}");
             Console.WriteLine($"Property of {this.Name}:");
-            foreach (var property in Property)
+            foreach (var index in Property)
             {
-                Console.WriteLine($"{property.Name}");
+                //добавь монополия или как
+                Console.WriteLine($"{Game.cells[index].Name}");
             }
             Console.WriteLine();
         }
@@ -47,6 +50,7 @@ namespace Monopoly
             {
                 Tuple<int, int> dice = Die.RollTwoDice();
                 this.MoveOnBoard(dice.Item1, dice.Item2);
+                this.MonopolyMove();
             }
         }
 
@@ -66,11 +70,37 @@ namespace Monopoly
             Game.cells[this.CurrentPosition].Action(this);
         }
 
-        public void PayRent(Company company)
+        public void MonopolyMove()
         {
-            this.Pay(company.Rent);
-            Console.WriteLine($"{this.Name} paid a rent {company.Rent}");
-            company.Owner.Recieve(company.Rent);
+            foreach (var color in this.MonopolyColors)
+            {
+                List<int> indexes = MONOPOLYINFO.monopolies[color];
+                int pos = -1, level = 12;
+                foreach (var index in indexes)
+                {
+                    if ((Game.cells[index] as Super).Level < level)
+                    {
+                        pos = (Game.cells[index] as Super).Position;
+                        level = (Game.cells[index] as Super).Level;
+                    }
+                }
+                if (this.Money >= (Game.cells[pos] as Super).HouseCost)
+                {
+                    Game.cells[pos] = new House((Super)Game.cells[pos]);
+                    this.Money -= (Game.cells[pos] as Super).HouseCost;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        public void PayRent(Super super)
+        {
+            this.Pay(super.Rent);
+            Console.WriteLine($"{this.Name} paid a rent {super.Rent}");
+            super.Owner.Recieve(super.Rent);
             Console.WriteLine();
         }
 
@@ -78,7 +108,8 @@ namespace Monopoly
         {
             while (this.Money - value < 0 && this.Property.Count != 0)
             {
-                Property[0].SellCompany(this);
+                Super super = Game.cells[0] as Super;
+                super.Sell(this);
             }
             if (this.Money - value < 0)
             {
@@ -97,3 +128,5 @@ namespace Monopoly
         }
     }
 }
+
+//checkIfMonop Game.cells[] = Destroy();

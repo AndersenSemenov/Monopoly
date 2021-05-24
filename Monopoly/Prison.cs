@@ -6,10 +6,12 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Prison : Cell
+    class Prison : ICell
     {
+        public string Name { get; set; }
+        public int Position { get; set; }
         public static List<Player> jailed = new List<Player>();
-        public override void Action(Player player)
+        public void Action(Player player)
         {
             if (jailed.Contains(player))
             {

@@ -6,11 +6,13 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class TaxeField: Cell
+    class TaxeField: ICell
     {
+        public string Name { get; set; }
+        public int Position { get; set; }
         public int AmountOfTax { get; set; }
 
-        public override void Action(Player player)
+        public void Action(Player player)
         {
             player.Pay(this.AmountOfTax);
         }

@@ -6,9 +6,11 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Start : Cell
+    class Start : ICell
     {
-        public override void Action(Player player)
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public void Action(Player player)
         {
             Console.WriteLine($"{player.Name} passed the circle");
             player.Recieve(1000);
