@@ -14,6 +14,9 @@ namespace Monopoly
             this.Cost = company.Cost;
             this.IsBought = company.IsBought;
             this.Owner = company.Owner;
+            this.HouseCost = company.HouseCost;
+            this.Position = company.Position;
+            this.Name = company.Name;
         }
 
 

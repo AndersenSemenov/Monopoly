@@ -27,21 +27,14 @@ namespace Monopoly
 
         public override void Sell(Player player)
         {
-            //base.Sell(player);
             Console.WriteLine($"{player.Name} sold a company {this.Name}");
             player.Recieve(Cost);
             IsBought = false;
             Owner = null;
-            var index = player.Property.BinarySearch(this.Position);
-            player.Property.RemoveAt(index);
+            player.Property.RemoveAt(0);
 
             // Monopoly -> Company
             Game.cells[this.Position] = company;
         }
-
-        //public Super Destroy()
-        //{
-        //    return company;
-        //}
     }
 }

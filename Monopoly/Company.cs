@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace Monopoly
 {
-    class Company : Super//, ICell 
+    class Company : Super 
     {
         private int _rent;
         public override int Rent { get => _rent; set => _rent = value; }
@@ -26,6 +26,7 @@ namespace Monopoly
                 {
                     MONOPOLYINFO.CreateMonopoly(this.Color);
                     player.MonopolyColors.Add(this.Color);
+                    Console.WriteLine($"{player.Name} got a {this.Color} monopoly!".ToUpper());
                 }
             }
             else
@@ -51,8 +52,7 @@ namespace Monopoly
             player.Recieve(Cost);
             IsBought = false;
             Owner = null;
-            var index = player.Property.BinarySearch(this.Position);
-            player.Property.RemoveAt(index);
+            player.Property.RemoveAt(0);
         }
 
         public static void Create()

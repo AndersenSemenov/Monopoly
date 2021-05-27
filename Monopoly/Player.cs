@@ -19,7 +19,7 @@ namespace Monopoly
         {
             Name = name;
             CurrentPosition = 0;
-            Money = 8000;
+            Money = 15000;
             BlockMovement = 0;
             IsLost = false;
         }
@@ -30,7 +30,6 @@ namespace Monopoly
             Console.WriteLine($"Property of {this.Name}:");
             foreach (var index in Property)
             {
-                //добавь монополия или как
                 Console.WriteLine($"{Game.cells[index].Name}");
             }
             Console.WriteLine();
@@ -49,8 +48,8 @@ namespace Monopoly
             else
             {
                 Tuple<int, int> dice = Die.RollTwoDice();
-                this.MoveOnBoard(dice.Item1, dice.Item2);
                 this.MonopolyMove();
+                this.MoveOnBoard(dice.Item1, dice.Item2);
             }
         }
 
@@ -87,7 +86,8 @@ namespace Monopoly
                 if (this.Money >= (Game.cells[pos] as Super).HouseCost && (Game.cells[pos] as Super).Level <= 5)
                 {
                     Game.cells[pos] = new House((Super)Game.cells[pos]);
-                    this.Money -= (Game.cells[pos] as Super).HouseCost;
+                    Console.WriteLine($"{this.Name} builded a house level {(Game.cells[pos] as Super).Level} on {(Game.cells[pos] as Super).Name}".ToUpper());
+                    this.Pay((Game.cells[pos] as Super).HouseCost);
                 }
                 else
                 {
@@ -108,8 +108,11 @@ namespace Monopoly
         {
             while (this.Money - value < 0 && this.Property.Count != 0)
             {
-                Super super = Game.cells[0] as Super;
-                super.Sell(this);
+                Super super = Game.cells[this.Property[0]] as Super;
+                if (this.Property.Count != 0)
+                {
+                    super.Sell(this);
+                }
             }
             if (this.Money - value < 0)
             {

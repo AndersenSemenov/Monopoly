@@ -6,8 +6,8 @@ namespace Monopoly
 {
     class House : Decorator
     {
-        public override int Rent { get => Convert.ToInt32(company.Rent * 1.5); }
-        public override int Level { get => company.Level + 1; } // проверить что не улетает на inf
+        public override int Rent { get => company.Rent * 2; }
+        public override int Level { get => company.Level + 1; }
         public House(Super company) : base(company)
         {
             this.company = company;
@@ -31,12 +31,7 @@ namespace Monopoly
             player.Recieve(company.HouseCost);
 
             // House -> House || Monopoly
-            Game.cells[this.Position] = Destroy();
-        }
-
-        public Super Destroy()
-        {
-            return company;
+            Game.cells[this.Position] = company;
         }
     }
 }
